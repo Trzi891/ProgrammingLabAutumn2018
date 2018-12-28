@@ -1,4 +1,10 @@
 public class Player {
+    /**
+     * @name name of player
+     * @coins the coins a player has
+     * @iswin check a player can win
+     * @cardsHaving the cards a player has
+     */
     private String name;
     private int coins;
     private boolean iswin;

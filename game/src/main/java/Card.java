@@ -3,6 +3,12 @@ import com.config;
 import javax.swing.*;
 
  class Card {
+     /**
+      * @oreder the number of a card
+      * @isPeng check if a card can peng (AAA:111,222,333,)
+      * @isGang check if a card can Gang (AAAA:1111,2222,3333)
+      * @isEaten check if a card can be eaten(ABC:123,234,345)
+      */
     private int order;
     private int type;
     private boolean isPeng;
