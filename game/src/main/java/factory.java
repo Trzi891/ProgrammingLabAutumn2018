@@ -1,6 +1,10 @@
 import com.config;
 
 public class factory {
+
+    /**
+     * judge whether a deck of cards have Peng(me:12345667,a card in a table:6   result:true)
+     */
     static boolean isPeng(Player[] players, int n, Card card) {
         for (int i = 1; i <= 17; i++) {
             if (players[n].cardsHaving[i].getType() == card.getType()
@@ -13,7 +17,9 @@ public class factory {
         return false;
     }
 
-
+    /**
+     *judge whether a deck of cards have Gang(me:123456667,a card in a table:6   result:1)
+     */
     static int isGangCard(Player[] players, int n, Card card) {
         for (int i = 1; i <= 16; i++) {
             if (players[n].cardsHaving[i].getType() == card.getType()
@@ -29,18 +35,23 @@ public class factory {
         return config.WINDY;
     }
 
+    /**
+     * if have Gang ,then return where they are
+     */
     static int isAnGang(Player player) {
         int sum;
         for (int i = 1; i <= 15; i++) {
             sum = 0;
             if (player.cardsHaving[i].is_Gang()) {
                 for (int j = 1; j < 4; j++) {
+                    //check if the type and the numbers of two cards are the same
                     if (player.cardsHaving[i].getType() == player.cardsHaving[i + 1].getType()
                             && player.cardsHaving[i].getOrder() == player.cardsHaving[i + j].getOrder()
                             && player.cardsHaving[i].getType() < 4) {
                         sum++;
                     }
                 }
+                //if sum==3,return where the cards are
                 if (sum == 3) {
                     return i;
                 }
@@ -48,7 +59,9 @@ public class factory {
         }
         return config.WINDY;
     }
-
+    /**
+     * check if the card you use can peng (peng:xxx)
+     */
     static int isCurrentCardPeng(Player[] players, int n, Card currentCard) {
         int i = 0;
         while (i <= 2) {
@@ -59,7 +72,9 @@ public class factory {
         }
         return config.WINDY;
     }
-
+    /**
+     * check if the card you use can gang,if can gang ,then return where they are(gang:xxxx)
+     */
     static int isCurrentCardGang(Player[] players, int n, Card currentCard) {
         int i = 0, num;
         while (i <= 2) {

@@ -1,7 +1,9 @@
 import com.config;
 
 public class HuUtil {
-
+    /**
+     * cards like 11223344556677, can win
+     */
     static boolean dragon7Couple(Player[] players, int n) {
         for (int i = 1; i <= 14; i = i + 2) {
             if (players[n].cardsHaving[i].is_Peng() || players[n].cardsHaving[i].is_Gang()) return false;
@@ -10,7 +12,9 @@ public class HuUtil {
         }
         return true;
     }
-
+    /**
+     * if it wins
+     */
     static boolean isHu(Player[] players, int n, int[] array) {
         if (dragon7Couple(players, n)) return true;
         Card.sortCards(players, n);
@@ -69,7 +73,9 @@ public class HuUtil {
         }
         return result;
     }
-
+    /**
+     * the head of majiang,cards like 22/33/44(same type)
+     */
     static boolean isJiangCard(Player[] players, int n, int[] array, int a, int b) {
         for (int i = a; i <= b; i++) {
             if ((players[n].cardsHaving[i].getOrder() == players[n].cardsHaving[i + 1].getOrder())

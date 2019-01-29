@@ -1,15 +1,12 @@
 import com.config;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class Game implements ActionListener {
     private GamingFrame frame = new GamingFrame();
 
     private Card cards[] = new Card[109];
-    private HuUtil huUtil = new HuUtil();
     private int currentCard;
     private int player;
     private int previousClick = -1;
@@ -44,7 +41,7 @@ public class Game implements ActionListener {
             else cards[i].setType(config.WAN);
             cards[i].setGang(false);
             cards[i].setPeng(false);
-            String string = "images/";
+            String string = "game/images/";
             String s="";
             string = string + (i % 9 + 1);
             if (cards[i].getType() == config.TONG) string = string + "tong.png";
@@ -87,7 +84,9 @@ public class Game implements ActionListener {
         currentCard++;
         return cards[i];
     }
-
+    /**
+     * player starts playing after getting a card
+     */
     private void playerPlays(Player[] players, int n, boolean b) {
         isOperable = b;
         for (int i = 0; i < 14; i++) {
@@ -108,15 +107,15 @@ public class Game implements ActionListener {
             }
         }
         int array[] = new int[19];
-        boolean b1 = HuUtil.isHu(competitors, player, array);
+        boolean b1 = HuUtil.isHu(competitors, player, array);//if win
         if (b1 && isOperableToo) {
-            frame.jbZhiMo.setVisible(true);
+            frame.jbZhiMo.setVisible(true);//is win
             frame.jbJump.setVisible(true);
             isOperableToo = true;
             this.frame.show(true);
             return;
         }
-        if (factory.isAnGang(competitors[0]) != -1 && !isOperableToo) {
+        if (factory.isAnGang(competitors[0]) != -1 && !isOperableToo) {//gang:xxxx
             frame.jbGang.setVisible(true);
             frame.jbJump.setVisible(true);
             isOperableToo = true;
@@ -125,13 +124,15 @@ public class Game implements ActionListener {
         }
         isOperableToo = false;
     }
-
+    /**
+     * robot starts playing after getting a card
+     */
     private void robotPlays(Player[] players, int n) {
         Card.sortCards(players, n);
         int array[] = new int[19];
-        if (HuUtil.isHu(players, n, array)) frame.robotWins(n, n);
+        if (HuUtil.isHu(players, n, array)) frame.robotWins(n, n);//if win
         else {
-            int gang = factory.isAnGang(players[n]);
+            int gang = factory.isAnGang(players[n]);//index of gang card(can get xxxx)
             if (gang != -1) {
                 for (int i = 0; i <= 3; i++) players[n].cardsHaving[gang + i].setGang(true);
                 players[n].cardsHaving[18] = getCard();
@@ -140,6 +141,7 @@ public class Game implements ActionListener {
             }
             for (int i = 1; i <= 18; i++) {
                 if (array[i] == 0 && players[n].cardsHaving[i].getType() <= 3) {
+                    //check if card i and card i+1 are the same
                     if ((Card.isTheSameCard(players[n].cardsHaving[i], players[n].cardsHaving[i + 1]))
                             || (players[n].cardsHaving[i].getOrder() + 1 == players[n].cardsHaving[i + 1].getOrder()
                             && players[n].cardsHaving[i].getType() == players[n].cardsHaving[i + 1].getType())
@@ -169,7 +171,6 @@ public class Game implements ActionListener {
             Card.sortCards(players, n);
             if (n == 1) {
                 frame.previousCardOfRight = cardOfPlayer.getImageIcon();
-//
             } else if (n == 2) {
                 frame.previousCardOfMiddle = cardOfPlayer.getImageIcon();
             } else if (n == 3) {
@@ -177,21 +178,25 @@ public class Game implements ActionListener {
             }
         }
     }
-
+    /**
+     * show the cards robots have
+     */
     private void show1() {
         for (int i = 1; i <= 3; i++) {
             for (int j = 1; j <= 18; j++) {
                 if (competitors[i].cardsHaving[j].getType() == 1)
-                    System.out.print(competitors[i].cardsHaving[j].getOrder() + "筒  ");
+                    System.out.print(competitors[i].cardsHaving[j].getOrder() + "Tong  ");//筒
                 else if (competitors[i].cardsHaving[j].getType() == 2)
-                    System.out.print(competitors[i].cardsHaving[j].getOrder() + "条  ");
+                    System.out.print(competitors[i].cardsHaving[j].getOrder() + "Tiao  ");//条
                 else if (competitors[i].cardsHaving[j].getType() == 3)
-                    System.out.print(competitors[i].cardsHaving[j].getOrder() + "万 ");
+                    System.out.print(competitors[i].cardsHaving[j].getOrder() + "Wan ");//万
             }
             System.out.println();
         }
     }
-
+    /**
+     * Game starts
+     */
     private void starting() {
         if (cardOfPlayer == null) {
             competitors[player].cardsHaving[18] = getCard();
@@ -207,7 +212,7 @@ public class Game implements ActionListener {
         }
         if (cardOfPlayer != null && cardOfPlayer.getType() < 4) {
             int address;
-            if ((address = factory.isCurrentWin(competitors, (player + 1) % 4, cardOfPlayer)) != -1) {
+            if ((address = factory.isCurrentWin(competitors, (player + 1) % 4, cardOfPlayer)) != -1) {//if win
                 if (address == 0) {
                     frame.jbHu.setVisible(true);
                     frame.jbJump.setVisible(true);
@@ -218,7 +223,7 @@ public class Game implements ActionListener {
                     frame.robotWins(address, player);
                     return;
                 }
-            } else if ((address = factory.isCurrentCardGang(competitors, (player + 1), cardOfPlayer)) != -1) {
+            } else if ((address = factory.isCurrentCardGang(competitors, (player + 1), cardOfPlayer)) != -1) {//gang card (xxxx)
                 if (address == 0) {
                     frame.jbGang.setVisible(true);
                     frame.jbPeng.setVisible(true);
@@ -228,14 +233,14 @@ public class Game implements ActionListener {
                 } else {
                     competitors[address].cardsHaving[18] = cardOfPlayer;
                     Card.sortCards(competitors, address);
-                    int i = factory.isAnGang(competitors[address]);
+                    int i = factory.isAnGang(competitors[address]);//index of gang card(xxxx)
                     for (int j = 0; j <= 3; j++) competitors[address].cardsHaving[i + j].setGang(true);
                     player = address;
                     cardOfPlayer = null;
                     starting();
                     return;
                 }
-            } else if ((address = factory.isCurrentCardPeng(competitors, (player + 1), cardOfPlayer)) != -1) {
+            } else if ((address = factory.isCurrentCardPeng(competitors, (player + 1), cardOfPlayer)) != -1) {//peng:xxx
                 if (address == 0) {
                     frame.jbPeng.setVisible(true);
                     frame.jbJump.setVisible(true);
@@ -244,7 +249,7 @@ public class Game implements ActionListener {
                 } else {
                     int suma = 0, sumb = 0, array[] = new int[19];
                     Card.sortCards(competitors, address);
-                    HuUtil.isHu(competitors, address, array);
+                    HuUtil.isHu(competitors, address, array);//if win
                     for (int i = 1; i <= 18; i++) {
                         if (array[i] == 1) suma++;
                     }
@@ -252,8 +257,8 @@ public class Game implements ActionListener {
                     competitors[5].cardsHaving[17] = cardOfPlayer;
                     competitors[5].cardsHaving[18] = cardOfPlayer;
                     Card.sortCards(competitors, 5);
-                    int num = factory.isAnGang(competitors[5]);
-                    HuUtil.isHu(competitors, 5, array);
+                    int num = factory.isAnGang(competitors[5]);//index of gang card(xxxx)
+                    HuUtil.isHu(competitors, 5, array);//if win
                     for (int i = 1; i <= 18; i++) {
                         if (array[i] == 1) sumb++;
                     }
@@ -261,7 +266,7 @@ public class Game implements ActionListener {
                     else {
                         competitors[address].cardsHaving[18] = cardOfPlayer;
                         Card.sortCards(competitors, address);
-                        for (int i = 0; i <= 2; i++) competitors[address].cardsHaving[i + num].setPeng(true);
+                        for (int i = 0; i <= 2; i++) competitors[address].cardsHaving[i + num].setPeng(true);//(xxx)
                         player = address;
                         robotPlays(competitors, address);
                         starting();
@@ -306,7 +311,7 @@ public class Game implements ActionListener {
             Card.sortCards(competitors, 0);
             playerPlays(competitors, 0, true);
         }
-        if (e.getSource() == frame.jbJump) {
+        if (e.getSource() == frame.jbJump) {//you dont want to peng or gang (exp:urs:22 ,robot puts:2,u can take 2 and peng,but u dont want)
             frame.verbsOFMJ(false, false, false, false, false);
             this.frame.show(true);
             if (isOperableToo) playerPlays(competitors, 0, isOperableToo);
@@ -315,7 +320,7 @@ public class Game implements ActionListener {
                 starting();
             }
         }
-        if (e.getSource() == frame.jbGang) {
+        if (e.getSource() == frame.jbGang) {//U have 444, robot puts 4,u take 4 then u have 4444,can gang
             frame.jbGang.setVisible(false);
             frame.jbPeng.setVisible(false);
             frame.jbJump.setVisible(false);
@@ -333,17 +338,17 @@ public class Game implements ActionListener {
             Card.sortCards(competitors, 0);
             starting();
         }
-        if (e.getSource() == frame.jbHu) {
+        if (e.getSource() == frame.jbHu) {//if win
             frame.verbsOFMJ(false, false, false, false, false);
             frame.playerWins(player);
         }
 
-        if (e.getSource() == frame.jbZhiMo) {
+        if (e.getSource() == frame.jbZhiMo) {//if win
             frame.verbsOFMJ(false, false, false, false, false);
             frame.playerWins(0);
         }
 
-        if (isOperable && e.getSource() == frame.jbYes && previousClick != -1) {
+        if (isOperable && e.getSource() == frame.jbYes && previousClick != -1) {//if a card can use
             cardOfPlayer = (competitors[0].cardsHaving[previousClick + 1]);
             competitors[0].cardsHaving[previousClick + 1] = choosedCard;
             frame.jButton[previousClick].setBounds(160 + 55 * (previousClick + 1), 600, config.WIDTH_NORMAL_CARD, config.HEIGHT_NORMAL_CARD);
@@ -366,6 +371,5 @@ public class Game implements ActionListener {
         }
         this.frame.show(true);
     }
-
 
 }

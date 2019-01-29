@@ -9,8 +9,6 @@ import java.awt.event.ActionListener;
 class MyPanel extends JFrame {
 
     JButton help;
-    boolean isStarting = false;
-
     JButton jb3;
     JPanel myPanel;
 
@@ -56,6 +54,5 @@ class MyPanel extends JFrame {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
-
 
 }
