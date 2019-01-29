@@ -13,18 +13,18 @@ public class RotateImageTest {
     @Test
     public void testRotate() throws IOException {
         ImageIcon a = new ImageIcon();
-        BufferedImage src = ImageIO.read(new File("G:\\ProgrammingLabAutumn2018\\images\\1tiao.png"));
+        BufferedImage src = ImageIO.read(new File("G:\\ProgrammingLabAutumn2018\\game\\images\\1tiao.png"));
         BufferedImage des = RotateImage.Rotate(src, 90);
         Assert.assertNotNull(des);
-        Assert.assertTrue(ImageIO.write(des, "png", new File("G:\\ProgrammingLabAutumn2018\\90left/1tiao.png")));
+        Assert.assertTrue(ImageIO.write(des, "png", new File("G:\\ProgrammingLabAutumn2018\\game\\90left/1tiao.png")));
 
         des = RotateImage.Rotate(src, 180);
         Assert.assertNotNull(des);
-        Assert.assertTrue(ImageIO.write(des, "png", new File("G:\\ProgrammingLabAutumn2018\\180up\\dog3.jpg")));
+        Assert.assertTrue(ImageIO.write(des, "png", new File("G:\\ProgrammingLabAutumn2018\\game\\180up\\dog3.jpg")));
 
         des = RotateImage.Rotate(src, 270);
         Assert.assertNotNull(des);
-        Assert.assertTrue(ImageIO.write(des, "png", new File("G:\\ProgrammingLabAutumn2018\\270right\\dog4.jpg")));
+        Assert.assertTrue(ImageIO.write(des, "png", new File("G:\\ProgrammingLabAutumn2018\\game\\270right\\dog4.jpg")));
 
     }
 
