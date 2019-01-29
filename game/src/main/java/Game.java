@@ -42,7 +42,7 @@ public class Game implements ActionListener {
             cards[i].setGang(false);
             cards[i].setPeng(false);
             String string = "game/images/";
-            String s="";
+            String s = "";
             string = string + (i % 9 + 1);
             if (cards[i].getType() == config.TONG) string = string + "tong.png";
             else if (cards[i].getType() == config.TIAO) string = string + "tiao.png";
@@ -84,6 +84,7 @@ public class Game implements ActionListener {
         currentCard++;
         return cards[i];
     }
+
     /**
      * player starts playing after getting a card
      */
@@ -124,6 +125,7 @@ public class Game implements ActionListener {
         }
         isOperableToo = false;
     }
+
     /**
      * robot starts playing after getting a card
      */
@@ -178,6 +180,7 @@ public class Game implements ActionListener {
             }
         }
     }
+
     /**
      * show the cards robots have
      */
@@ -194,6 +197,7 @@ public class Game implements ActionListener {
             System.out.println();
         }
     }
+
     /**
      * Game starts
      */
@@ -223,7 +227,7 @@ public class Game implements ActionListener {
                     frame.robotWins(address, player);
                     return;
                 }
-            } else if ((address = factory.isCurrentCardGang(competitors, (player + 1), cardOfPlayer)) != -1) {//gang card (xxxx)
+            } else if ((address = factory.isCurrentCardGang(competitors, (player + 1) % 4, cardOfPlayer)) != -1) {//gang card (xxxx)
                 if (address == 0) {
                     frame.jbGang.setVisible(true);
                     frame.jbPeng.setVisible(true);
@@ -234,13 +238,14 @@ public class Game implements ActionListener {
                     competitors[address].cardsHaving[18] = cardOfPlayer;
                     Card.sortCards(competitors, address);
                     int i = factory.isAnGang(competitors[address]);//index of gang card(xxxx)
-                    for (int j = 0; j <= 3; j++) competitors[address].cardsHaving[i + j].setGang(true);
+                    for (int j = 0; j <= 3; j++)
+                        competitors[address].cardsHaving[i + j].setGang(true);
                     player = address;
                     cardOfPlayer = null;
                     starting();
                     return;
                 }
-            } else if ((address = factory.isCurrentCardPeng(competitors, (player + 1), cardOfPlayer)) != -1) {//peng:xxx
+            } else if ((address = factory.isCurrentCardPeng(competitors, (player + 1) % 4, cardOfPlayer)) != -1) {//peng:xxx
                 if (address == 0) {
                     frame.jbPeng.setVisible(true);
                     frame.jbJump.setVisible(true);
